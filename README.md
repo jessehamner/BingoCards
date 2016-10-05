@@ -9,8 +9,11 @@ was taken from [tex.stackexchange.com](http://tex.stackexchange.com/questions/63
 
 ## Introduction
 
-The list of phrases (and don't make any individual phrase very long) needs to be semicolon-separated text, 
-with a small bit of LaTeX encompassing the list. 
+The list of phrases (and don't make any individual phrase very long) 
+needs to be semicolon-separated text, with a small bit of LaTeX 
+encompassing the list. You can make the list about anything; I have
+added a vice-presidential list too, but the relevant words will always
+change.
 
 ```LaTeX
 \myItems{Believe me;
@@ -31,8 +34,10 @@ The list should terminate only with a close-brace, though the brace can be on a 
 
 The LaTeX file, when run, will take the list, pick 24 at random 
 (the "Free Space" is humorously listed as _"Candidate Talks Past Allotted Time"_, 
-as though that could ever _not_ happen), and assign them to a standard 5 x 5 bingo card. 
-This random process is nice because it avoids "sets" of cards all providing Bingo at the same time. 
+as though that could ever _not_ happen), and assign them to a 
+standard 5 x 5 bingo card. This random process is nice because it avoids 
+"sets" of cards all providing Bingo at the same time. 
+
 The LaTeX file includes a for-loop to create some number (initially set at 50) of PDF cards. 
 
 ## Customizing the Code
@@ -64,24 +69,31 @@ If you want to use an arbitrary "Free Space" label, you can change the
 \node [scale=1.2] at ($(\col,-\row)-(0.5,0.7)$) {Entirely};
 ```
 
-For those wholly new to TikZ, the second number of the pair is a y-coordinate for the line, 
-and a line space of 0.2 is about right.
-If you trim the cell to two lines, you will want to change the y-values to be more centered. 
+And note there is a `\renewcommand` you can uncomment for a totally generic "Free Space" square.
+
+For those wholly new to TikZ, the second number of the pair is a y-coordinate 
+for the line, and a line space of 0.2 is about right.
+If you trim the cell to two lines, you will want to change the y-values 
+to be more centered. 
 
 ## The Master Checklist
 
-The python script parses the entire list and provides a ```longtable``` checklist for the moderator to use 
-when evaluating a given event. 
-The ```bingochecklist.tex``` file reads the output of the python script, which is a file called ```checklist1.tex```.
+The python script parses the entire list and provides a ```longtable``` 
+checklist for the moderator to use when evaluating a given event. 
+The ```bingochecklist.tex``` file reads the output of the python script, 
+which is a file called ```checklist1.tex```.
+
 So, from a terminal on your machine of choice, run 
 
 ```shell
 python makechecklist.py
 ```
 
-And if you've got all the files where they are supposed to be, it will form up the guts of the checklist. 
+And if you've got all the files where they are supposed to be, it will 
+form up the guts of the checklist. 
 Next, compile ```bingochecklist.tex``` a few times and you'll be good to go. 
-You need to compile the TeX file at least twice because it uses ```longtable```, and column widths are determined
-dynamically over the course of a few LaTeX compiles. 
+You need to compile the TeX file at least twice because it uses 
+```longtable```, and column widths are determined dynamically over 
+the course of a few LaTeX compiles. 
 
 Jesse Hamner, 2016. :rocket:

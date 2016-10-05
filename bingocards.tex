@@ -4,7 +4,8 @@
 % mostly stolen from 
 % http://tex.stackexchange.com/questions/63357/automatically-generated-bingo-cards
 %
-% with a few additions myself
+% but cleaned up a little, and with a few additions.
+%
 % Jesse Hamner, 2016
 
 \usepackage{xstring}
@@ -13,9 +14,13 @@
 \usetikzlibrary{calc}
 \usepackage{xparse}
 
-\input{random.tex}
+\input{random.tex} % this isn't supposed to exist yet, so if you get errors about it, ignore them
 \newcount\randomnum
-\ExplSyntaxOn
+% The LaTeX3 coding language, -expl3-, uses : and _ as 'letters' in 
+% function and variable names. 
+% setting expl syntax to "on" allows use of -expl3- code-level material 
+% in a document.
+\ExplSyntaxOn % underscores are no longer a problem, for one thing
 
 \seq_new:N \g_my_items_seq
 \seq_new:N \l_my_tmp_items_seq
@@ -27,86 +32,111 @@
 \cs_generate_variant:Nn \seq_remove_all:Nn {Nx}
 
 \NewDocumentCommand {\myItems} {m}
+{
+	\seq_clear:N \g_my_items_seq % clear item list 
+    \seq_gset_split:Nnn \g_my_items_seq {;} {#1} % put item list into g_my_items_seq
+    \int_compare:nNnT {\seq_count:N \g_my_items_seq} < {24} % check whether there are enough items
     {
-      \seq_clear:N \g_my_items_seq % clear item list 
-      \seq_gset_split:Nnn \g_my_items_seq {;} {#1} % put item list in seq
-      \int_compare:nNnT {\seq_count:N \g_my_items_seq} < {24} {\msg_error:nn {bingo} {Too~few~items!}} % check whether there are enough items
-    }
+    	\msg_error:nn {bingo} {Too~few~items!}
+	} 
+}
 
 \NewDocumentCommand{\setItems}{}
 {
-\seq_set_eq:NN \l_my_tmp_items_seq \g_my_items_seq % put in temp seq so that multiple cards can be produced
-\prg_replicate:nn {24} %generate random list of 24 items
+	\seq_set_eq:NN \l_my_tmp_items_seq \g_my_items_seq % put in temp seq so that multiple cards can be produced
+	\prg_replicate:nn {24} % generate random list of 24 items
     {
-        \int_set:Nn \l_tmp_int {\seq_count:N \l_my_tmp_items_seq}% set current length of list
-        \setrannum{\randomnum}{1}{\int_use:N \l_tmp_int} % choose random num up to length of seq
-        \seq_put_right:Nx \g_my_randomized_seq {\seq_item:Nn \l_my_tmp_items_seq {\the\randomnum}}% grab corresponding item and put in tmp seq
-        \seq_remove_all:Nx \l_my_tmp_items_seq {\seq_item:Nn \l_my_tmp_items_seq {\the\randomnum}}%delete that item from temp seq
+        \int_set:Nn \l_tmp_int {\seq_count:N \l_my_tmp_items_seq} 	% set current length of list
+        \setrannum{\randomnum}{1}{ % choose random num up to length of seq
+        	\int_use:N \l_tmp_int
+		}
+        \seq_put_right:Nx \g_my_randomized_seq { % grab corresponding item and put in tmp seq
+        	\seq_item:Nn \l_my_tmp_items_seq {\the\randomnum}
+		} 
+        \seq_remove_all:Nx \l_my_tmp_items_seq { % delete that item from temp seq
+        	\seq_item:Nn \l_my_tmp_items_seq {\the\randomnum}
+		} 
     }
-\seq_clear:N \l_my_tmp_items_seq %clear temp seq when done
+\seq_clear:N \l_my_tmp_items_seq % clear temp seq when done
 }
 
 \NewDocumentCommand {\NodeText}{}
-    {
-        \seq_gpop_right:NN \g_my_randomized_seq \l_tmpa_tl %pop item from randomized seq into token list
-        \tl_use:N \l_tmpa_tl %use that item.
-    }
-
+{
+	\seq_gpop_right:NN \g_my_randomized_seq \l_tmpa_tl % pop item from randomized seq into token list
+    \tl_use:N \l_tmpa_tl % use that item.
+}
 
 \ExplSyntaxOff
+
 
 \def\NumOfColumns{5}%
 \def\Sequence{1, 2, 3, 4, 5}%
 \newcommand{\sep}{1mm}
 
-% make a nice identifier for the card (in case, say, there is more than one
+% make a nice identifier for the card (perhaps there is more than one
 % presidential debate, etc.)
 \newcommand{\biglabel}{\vspace{0.2in}\begin{center}
 \begin{LARGE}
 Rawlins Hall Bingo
 
-Vice-Presidential Debate
+Second Presidential Debate
 
-4 October 2016
+9 October 2016
 
 \end{LARGE}
 \end{center}
 }
 
+\newcommand{\freespace}{
+	\filldraw[fill=gray!35, draw=black] ($(\col,-\row)-(1,1)$) rectangle ($(\col,-\row)$) ;
+% "Free Space" -- that's the joke:
+    \node [scale=1.2] at ($(\col,-\row)-(0.5,0.3)$) {Candidate};
+    \node [scale=1.2] at ($(\col,-\row)-(0.5,0.5)$) {Talks Past};
+    \node [scale=1.2] at ($(\col,-\row)-(0.5,0.7)$) {Allotted Time}; 
+}
+
+% If you want a more standard free space square:
+%\renewcommand{\freespace}{
+%	\filldraw[fill=gray!35, draw=black] ($(\col,-\row)-(1,1)$) rectangle ($(\col,-\row)$) ;
+%    \node [scale=1.2] at ($(\col,-\row)-(0.5,0.4)$) {Free};
+%    \node [scale=1.2] at ($(\col,-\row)-(0.5,0.6)$) {Space};
+%}
+
 % Although it doesn't save any code by breaking this out into its own 
 % function (subroutine), it makes the code easier to parse down below
 % in the for loop:
-\newcommand{\drawthecard}{\begin{tikzpicture}[draw=black, thick, x=\Size,y=\Size]
-\foreach \row in \Sequence{%
-    \foreach \col in \Sequence {%
-        \pgfmathtruncatemacro{\value}{\col+\NumOfColumns*(\row-1)}
-        \pgfmathsetmacro{\ColRowProduce}{\col*\row}
-        \IfEq{\ColRowProduce}{9}{% If is center square:
-            \filldraw[fill=gray!35, draw=black] ($(\col,-\row)-(1,1)$) rectangle ($(\col,-\row)$) ;
-% "Free Space" -- that's the joke:
-           \node [scale=1.2] at ($(\col,-\row)-(0.5,0.3)$) {Candidate};
-           \node [scale=1.2] at ($(\col,-\row)-(0.5,0.5)$) {Talks Past};
-           \node [scale=1.2] at ($(\col,-\row)-(0.5,0.7)$) {Allotted Time}; }{
-           \node [Square] at ($(\col,-\row)-(0.5,0.5)$) {\large \NodeText};
-        }
-    }
-}    
+\newcommand{\drawthecard}{
+\begin{tikzpicture}[draw=black, thick, x=\Size,y=\Size]
+	\foreach \row in \Sequence{%
+    	\foreach \col in \Sequence {%
+        	\pgfmathtruncatemacro{\value}{\col+\NumOfColumns*(\row-1)}
+        	\pgfmathsetmacro{\ColRowProduce}{\col*\row} % 3 x 3 = 9
+        	\IfEq{\ColRowProduce}{9}{% If is center square, do the \freespace command:
+        		\freespace
+        	}
+        	{ % if it is not the center square:
+           		\node [Square] at ($(\col,-\row)-(0.5,0.5)$) {\large \NodeText};
+        	}
+    	}
+	}
 \end{tikzpicture}
 }
 
 \newcommand{\Size}{3.1cm}
 \newcommand{\Sizeinner}{3.0cm}
+
 \tikzset{Square/.style={
-inner sep=0pt,
-text width=\Sizeinner, 
-minimum size=\Size,
-draw=black,
-align=center,
-}
+	inner sep=0pt,
+	text width=\Sizeinner, 
+	minimum size=\Size,
+	draw=black,
+	align=center
+	}
 }
 
 \begin{document}
 \pagestyle{empty}
+
 %\myItems{this;will;produce;an;error;because;there;aren't;enough;items}
 
 % These items should be contained in a separate file, formatted
@@ -122,13 +152,13 @@ align=center,
 \foreach \n in {0,...,49}{
 
 % select and randomize the entries:
-\setItems
+	\setItems
 
 % actually draw the card:
-\drawthecard
+	\drawthecard
 
 % add the label text:
-\biglabel
+	\biglabel
 
 } % done with the loop
 
