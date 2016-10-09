@@ -69,7 +69,8 @@ If you want to use an arbitrary "Free Space" label, you can change the
 \node [scale=1.2] at ($(\col,-\row)-(0.5,0.7)$) {Entirely};
 ```
 
-And note there is a `\renewcommand` you can uncomment for a totally generic "Free Space" square.
+And note there is a `\renewcommand` or two you can uncomment for either a 
+totally generic "Free Space" square, or a blindingly obvious topic/comment.
 
 For those wholly new to TikZ, the second number of the pair is a y-coordinate 
 for the line, and a line space of 0.2 is about right.
