@@ -97,4 +97,4 @@ You need to compile the TeX file at least twice because it uses
 ```longtable```, and column widths are determined dynamically over 
 the course of a few LaTeX compiles. 
 
-Jesse Hamner, 2016. :rocket:
+Jesse Hamner, 2016-2017. :rocket:
