@@ -1,4 +1,4 @@
-#/usr/bin/python
+#!/usr/bin/env python
 import os
 import sys
 import re
@@ -13,14 +13,18 @@ import re
 
 # Functions:
 
-def makeEntry(varname):
-    """Take a nicely formatted variable (string) and write it into a LaTeX \
-    [long]table cell"""
+def make_entry(varname):
+    """
+    Take a nicely formatted variable (string) and write it into a LaTeX \
+    [long]table cell
+    """
     tabline = str( "$\\square$ & %s \\\\[\\sep]\n" % varname )
-    return(tabline)
+    return tabline
 
-def slurpInFile(fn, theList):
-    """Open an input file, parse it, ignore some fields, and nicely format the\
+
+def slurp_in_file(fn, theList):
+    """
+    Open an input file, parse it, ignore some fields, and nicely format the\
     remainder of the file into a long text string of LaTeX tabular fields."""
     f=open(fn, 'r')
     li=f.read()
@@ -37,15 +41,15 @@ def slurpInFile(fn, theList):
                 if ( re.match ('^\s*$', j) ):
                     continue
                 j = re.sub('\\\\myItems{', "", j)
-                theList=theList+makeEntry(j)
+                theList=theList+make_entry(j)
 
     return 0
 
 # Main loop:
 
-filename="bingolist.tex"
+filename="superbowlbingolist.tex"
 nicetable="% Hopefully a nice table\n\n"
-nicetable = slurpInFile(filename, nicetable)
+nicetable = slurp_in_file(filename, nicetable)
 
 # write out the table to a file:
 
@@ -56,6 +60,6 @@ output.close()
 
 # let user know: 
 
-print("wrote output to %s" % ofile)
+print(f'Wrote output to {ofile}')
 
 # EOF

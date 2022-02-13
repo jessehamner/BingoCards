@@ -81,9 +81,9 @@
 \begin{LARGE}
 Bingo
 
-President Trump's State of the Union Address
+Super Bowl
 
-04 February 2020
+13 February 2022
 
 \end{LARGE}
 \end{center}
@@ -100,7 +100,7 @@ President Trump's State of the Union Address
 % use Donald_Trump_official_portrait.jpg as free space image:
 \renewcommand{\freespace}{
 	\filldraw[fill=gray!90, draw=black] ($(\col,-\row)-(1,1)$) rectangle ($(\col,-\row)$) ;
-	\node [scale=1.2] at ($(\col,-\row)-(0.5,0.5)$) {\includegraphics[scale=0.06, clip=true, trim=0 300 0 10]{Donald_Trump_official_portrait.jpg}};
+    \node [scale=1.2] at ($(\col,-\row)-(0.5,0.5)$) {\includegraphics[scale=0.16, clip=true, trim=0 0 0 0]{nfl_logo.png}};
 	
 }
 
@@ -156,7 +156,7 @@ President Trump's State of the Union Address
 %\myItems{``Believe me"; Tax returns; Benghazi; Shot of Bill Clinton in audience; Clinton Foundation; ``Make America Great Again"; Tim Kaine; Build ``the wall"; Heckler interrupts debate; Candidate talks past allotted time; Gun ban; NAFTA; Black Lives Matter; ``Basket of deplorables"; Alt-right; Florida; Mike Pence; Moderator interrupts candidate; Free market; ``My record shows ...''; Terrorism; Candidate demands an apology; John McCain; Pam Bondi; Health of candidate; Trump charity; ``Liberal media"; Shot of Melania Trump in audience; ``What do you have to lose?"; China; Taxes; Climate change; Middle East; Emails; ``I've employed thousands of people"; Joke about Trump's hair; Candidate says the other is ``disqualified"; Clinton mentions children--any children; Emails; Temperament; Transparency; ``Stronger Together"; NAFTA; Bankruptcy; Birther; Audience laughs; NATO; ``Tremendous success"; ``I can fix it"; President Obama; Ronald Reagan; Audience claps; Rigged; Trump says he was against the Iraq War; The Second Amendment; Trade agreement; Skittles; Income inequality; Top 1\%; Political correctness }
 
 % read in the list of 'squares' from the file you have written:
-\input{bingolist.tex}
+\input{superbowlbingolist.tex}
 
 % start a for-loop to make each page (its own card)
 \foreach \n in {0,...,49}{
