@@ -3,6 +3,7 @@
 Takes a user-supplied list of phrases and randomly assigns them to a user-specified number of bingo cards, using LaTeX. 
 A python script creates a complete checklist for all possible bingo card cells. 
 This project is ideal for televised political events like State of the Union or presidential [or primary] debates.
+New for 2022: also ideal for a Super Bowl party.
 
 Although I made some changes to the LaTeX code, the bulk of the code -- and all of the hard stuff -- 
 was taken from [tex.stackexchange.com](http://tex.stackexchange.com/questions/63357/automatically-generated-bingo-cards).
@@ -39,6 +40,12 @@ standard 5 x 5 bingo card. This random process is nice because it avoids
 "sets" of cards all providing Bingo at the same time. 
 
 The LaTeX file includes a for-loop to create some number (initially set at 50) of PDF cards. 
+
+## Thanks
+
+I've gotten help over the years from a few people, including the above-mentioned StackExchange thread,
+my spouse, and in 2022, from my Germanic friend Robin, who might prefer that I leave him out of this, but
+he is a LaTeX wizard, and I know it.
 
 ## Customizing the Code
 
@@ -97,4 +104,4 @@ You need to compile the TeX file at least twice because it uses
 ```longtable```, and column widths are determined dynamically over 
 the course of a few LaTeX compiles. 
 
-Jesse Hamner, 2016-2017. :rocket:
+Jesse Hamner, 2016-2022. :rocket:
