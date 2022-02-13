@@ -13,21 +13,24 @@ import re
 
 # Functions:
 
-def make_entry(one_pair):
+def make_entry(one_pair, indexval):
     """
     Take a nicely formatted variable (string) and write it into a LaTeX
     [long]table cell
     """
     one_pair[0] = re.sub('\\\\myItems{', "", one_pair[0])
     one_pair[1] = re.sub('\\\\myItems{', "", one_pair[1])
+    choice_menu = str("\\CheckBox[checkboxsymbol=\\ding{53}")
+    
 
-    tabline = str(f"$\\square$ & {one_pair[0]} &")
+    tabline = choice_menu + str(", name=checkbox" + str(indexval) + "]{} & " + one_pair[0] + " &")
 
     if re.search('}', one_pair[1] ):
-        tabline += str("&\\\\[\\sep]\n")
+        tabline += str("\\\\[\\sep]\n")
         return tabline
-
-    tabline += str(f"$\\square$ & {one_pair[1]} \\\\[\\sep]\n")
+    iv1 = str(indexval + 1)
+    tabline += choice_menu + str(", name=checkbox" + iv1 + "]{} & " + one_pair[1] )
+    tabline += str(f"\\\\[\\sep]\n")
     return tabline
 
 
@@ -56,7 +59,7 @@ def slurp_in_file(fn, theList):
         except:
             pass
         
-        theList += make_entry(mline)
+        theList += make_entry(mline, i)
 
             #for j in mline:
             #    if re.match('^\s*$', j):

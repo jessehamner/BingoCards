@@ -4,12 +4,26 @@
 \usepackage{longtable}
 \usepackage{amsmath, amssymb}
 \usepackage{marvosym}
+\usepackage{hyperref}
 \usepackage[left=0.75in,right=0.75in,top=1.0in,bottom=0.75in]{geometry}
+\renewcommand*{\DefaultOptionsofRadio}{print,radio, radiosymbol=6, width=\baselineskip, bordercolor={black}, borderwidth=0pt}
+\def\DefaultHeightofCheckBox{0.5\baselineskip}
+\def\DefaultWidthofCheckBox{0.5\baselineskip}
+
+\renewcommand*{\LayoutCheckField}[2]{#2 #1}
+\renewcommand*{\DefaultWidthofCheckBox}{1em}
+\renewcommand*{\DefaultHeightofCheckBox}{1em}
+\renewcommand*{\LayoutCheckField}[2]{%
+ \parbox[\DefaultHeightofCheckBox]{\DefaultWidthofCheckBox}{#2} #1}
 
 \newcommand{\sep}{1mm}
 \newcommand{\negsep}{-3mm}
 
+\newcolumntype{L}[1]{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+
 \begin{document}
+\begin{Form}
+
 
 \begin{center}
 \begin{Large}
@@ -25,13 +39,13 @@ Checklist for Super Bowl bingo boxes
 
 \end{center}
 
-\begin{longtable}{l p {2.75in} l p{2.75in}}
+    \begin{longtable}{l L{2.75in} l L{2.75in}}
 
-Said  & Item & Said & Item \\[\sep]
+        & \textbf{Item} && \textbf{Item} \\[\sep]
 \hline\\[\negsep]
 \endfirsthead
 
-Said  & Item & Said & Item\\[\sep]
+        & \textbf{Item} && \textbf{Item} \\[\sep]
 \hline\\[\negsep]
 \endhead
 
@@ -41,5 +55,6 @@ Said  & Item & Said & Item\\[\sep]
 \input{checklist1.tex}
 
 \end{longtable}
+\end{Form}
 
 \end{document}
