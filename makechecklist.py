@@ -13,35 +13,63 @@ import re
 
 # Functions:
 
-def make_entry(varname):
+def make_entry(one_pair):
     """
-    Take a nicely formatted variable (string) and write it into a LaTeX \
+    Take a nicely formatted variable (string) and write it into a LaTeX
     [long]table cell
     """
-    tabline = str( "$\\square$ & %s \\\\[\\sep]\n" % varname )
+    one_pair[0] = re.sub('\\\\myItems{', "", one_pair[0])
+    one_pair[1] = re.sub('\\\\myItems{', "", one_pair[1])
+
+    tabline = str(f"$\\square$ & {one_pair[0]} &")
+
+    if re.search('}', one_pair[1] ):
+        tabline += str("&\\\\[\\sep]\n")
+        return tabline
+
+    tabline += str(f"$\\square$ & {one_pair[1]} \\\\[\\sep]\n")
     return tabline
 
 
 def slurp_in_file(fn, theList):
     """
-    Open an input file, parse it, ignore some fields, and nicely format the\
-    remainder of the file into a long text string of LaTeX tabular fields."""
+    Open an input file, parse it, ignore some fields, and nicely format the
+    remainder of the file into a long text string of LaTeX tabular fields.
+    """
     f=open(fn, 'r')
     li=f.read()
     grr = li.split('\n')
-    for i in grr:
-        if( re.search('^%|^\s*$', i) ):
-            continue
-        elif (re.match('\s*}\s*$', i) ):
+    for i in range(0, len(grr), 2):
+        mline=['','']
+        if( re.search('^%|^\s*$', grr[i]) ):
+            mline[0] = '' 
+        elif( re.search('^%|^\s*$', grr[i+1]) ):
+            mline[1] = ''
+        
+        try:
+            mline[0] = re.sub(';', '', grr[i])
+        except:
+            pass
+#            print (mline)
+        try:    
+            mline[1] = re.sub(';', '', grr[i+1])
+        except:
+            pass
+        
+        theList += make_entry(mline)
+
+            #for j in mline:
+            #    if re.match('^\s*$', j):
+            #        continue
+            #    j = re.sub('\\\\myItems{', "", j)
+            #    theList = theList + make_entry(mline)
+        if (re.match('\s*}\s*$', grr[i]) ):
+            return(theList)
+        elif (re.match('\s*}\s*$', grr[i+1]) ):
             return(theList)
         else:
-            mline=i.split(';')
-#            print (mline)
-            for j in mline:
-                if ( re.match ('^\s*$', j) ):
-                    continue
-                j = re.sub('\\\\myItems{', "", j)
-                theList=theList+make_entry(j)
+            continue
+
 
     return 0
 
